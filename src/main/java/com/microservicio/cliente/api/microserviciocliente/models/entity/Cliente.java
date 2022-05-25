@@ -1,6 +1,9 @@
 package com.microservicio.cliente.api.microserviciocliente.models.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "clientes")
@@ -10,10 +13,21 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
     private String nombres;
+
+    @NotEmpty
     private String apellidos;
+    
+    @NotEmpty
     private String direccion;
+
+    @NotEmpty
+    @Email
     private String email;
+
+    @NotEmpty
+    @Pattern(regexp = "^\\+51\\s9[0-9]{8}$", message = "debe coincidir con +519...")
     private String celular;
 
     public Cliente() {

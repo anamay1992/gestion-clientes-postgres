@@ -1,8 +1,12 @@
 package com.microservicio.cliente.api.microserviciocliente.controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import com.microservicio.cliente.api.microserviciocliente.models.dto.ClienteDto;
 import com.microservicio.cliente.api.microserviciocliente.models.entity.Cliente;
@@ -14,6 +18,7 @@ import com.microservicio.cliente.api.microserviciocliente.utils.ResponseList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -72,7 +77,10 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> crear(@RequestBody Cliente cliente) {
+    public ResponseEntity<?> crear(@Valid @RequestBody Cliente cliente, BindingResult result) {
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
         Cliente nuevoCliente = service.save(cliente);
         ClienteDto dto = new ClienteDto(
             nuevoCliente.getId(),
@@ -87,7 +95,10 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Cliente cliente) {
+    public ResponseEntity<?> actualizar(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id) {
+        if (result.hasErrors()) {
+            return this.validar(result);
+        }
         Cliente busqueda = service.findById(id);
         if (Objects.isNull(busqueda)) {
             Response respuesta = new Response(EnumResponse.RESPONSE_1004.getCode(), EnumResponse.RESPONSE_1004.getMessage(), null);
@@ -129,6 +140,14 @@ public class ClienteController {
         );
         Response respuesta = new Response(EnumResponse.RESPONSE_1007.getCode(), EnumResponse.RESPONSE_1007.getMessage(), dto);
         return ResponseEntity.status(HttpStatus.OK).body(respuesta);
+    }
+
+    private ResponseEntity<?> validar(BindingResult result) {
+        Map<String, Object> errores = new HashMap<>();
+        result.getFieldErrors().forEach(error -> {
+            errores.put(error.getField(), "El campo " + error.getField() + " " + error.getDefaultMessage());
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
     }
 
 }
