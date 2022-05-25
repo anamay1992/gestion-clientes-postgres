@@ -60,7 +60,7 @@ public class ClienteController {
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         Cliente busqueda = service.findById(id);
-        if (Objects.isNull(busqueda)) {
+        if (busqueda == null) {
             Response respuesta = new Response(EnumResponse.RESPONSE_1004.getCode(), EnumResponse.RESPONSE_1004.getMessage(), null);
             return ResponseEntity.status(HttpStatus.OK).body(respuesta);
         }
