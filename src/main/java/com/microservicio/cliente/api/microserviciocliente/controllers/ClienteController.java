@@ -60,7 +60,7 @@ public class ClienteController {
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         Cliente busqueda = service.findById(id);
-        if (busqueda == null) {
+        if (Objects.isNull(busqueda)) {
             Response respuesta = new Response(EnumResponse.RESPONSE_1004.getCode(), EnumResponse.RESPONSE_1004.getMessage(), null);
             return ResponseEntity.status(HttpStatus.OK).body(respuesta);
         }
@@ -72,7 +72,7 @@ public class ClienteController {
             busqueda.getEmail(), 
             busqueda.getCelular()
         );
-        Response respuesta = new Response(EnumResponse.RESPONSE_1004.getCode(), EnumResponse.RESPONSE_1004.getMessage(), dto);
+        Response respuesta = new Response(EnumResponse.RESPONSE_1003.getCode(), EnumResponse.RESPONSE_1003.getMessage(), dto);
         return ResponseEntity.status(HttpStatus.OK).body(respuesta);
     }
 
