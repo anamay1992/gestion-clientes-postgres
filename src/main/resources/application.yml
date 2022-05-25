@@ -1,0 +1,30 @@
+server:
+  port: 8080
+logging:
+    level:
+        org:
+            hibernate:
+                SQL: debug
+                
+spring:
+  application:
+    name: microservicio-cliente
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gestion_clientes
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+    generate-ddl: true
+    properties:
+      hibernate:
+        jdbc:
+            lob:
+                non-contextual-creation: true
+
+springdoc:
+  api-docs:
+    path: /api/clientes/docs
+  swagger-ui:
+    path: /api/clientes/swagger-ui.html
