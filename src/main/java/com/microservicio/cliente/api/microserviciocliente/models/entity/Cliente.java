@@ -27,7 +27,7 @@ public class Cliente {
     private String email;
 
     @NotEmpty
-    @Pattern(regexp = "^\\+51\\s9[0-9]{8}$", message = "debe coincidir con +519...")
+    @Pattern(regexp = "^\\+51\\s9[0-9]{8}$", message = "debe coincidir con +51 9...")
     private String celular;
 
     public Cliente() {
